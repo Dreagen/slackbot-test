@@ -28,6 +28,8 @@ namespace Noobot.Examples.Web.LuisAi
     public enum LuisResponseValue
     {
         LastPlayedChampion,
+        LastGameStats,
+        LastGameResult,
         None
     }
 }

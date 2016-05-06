@@ -8,13 +8,17 @@ using Noobot.Examples.Web.RiotApi.Models;
 
 namespace Noobot.Examples.Web.RiotApi
 {
-    public class RiotService
+    public class RiotService : IRiotService
     {
         private readonly string _euwBaseUrl = "https://euw.api.pvp.net/api/lol/euw";
         private readonly string _globalBaseUrl = "https://global.api.pvp.net/api/lol/static-data/euw/v1.2";
-        private readonly string _apiKey = "api_key=d3e4d7ea-3625-4e6f-98da-817ce5832735";
+        private readonly string _apiKey;
         private readonly int _dreagenId = 28147640;
 
+        public RiotService(string apiKey)
+        {
+            _apiKey = $"api_key={apiKey}";
+        }
         public string GetLastPlayedChampion(string summoner = "Dreagen")
         {
             List<Match> lastMatchesForSummonerId = GetLastMatchesForSummonerId(_dreagenId, 1);
@@ -26,6 +30,58 @@ namespace Noobot.Examples.Web.RiotApi
             Champion champion =  GetChampionById(lastMatchesForSummonerId.First().Champion);
 
             return $"{champion.Name}, {champion.Title}";
+        }
+
+        public string GetResultOfLastGame(string summoner = "Dreagen")
+        {
+            List<Match> lastMatchesForSummonerId = GetLastMatchesForSummonerId(_dreagenId, 1);
+            if (!lastMatchesForSummonerId.Any())
+            {
+                return null;
+            }
+
+            Match lastMatch = lastMatchesForSummonerId.First();
+            Champion champion = GetChampionById(lastMatch.Champion);
+
+            Participant participant = GetParticipantStatsForMatch(lastMatch, champion);
+
+            return participant.Stats.Winner ? "win" : "loss";
+        }
+
+        public string GetStatsOfLastGame(string summoner = "Dreagen")
+        {
+            List<Match> lastMatchesForSummonerId = GetLastMatchesForSummonerId(_dreagenId, 1);
+            if (!lastMatchesForSummonerId.Any())
+            {
+                return null;
+            }
+
+            Match lastMatch = lastMatchesForSummonerId.First();
+            Champion champion = GetChampionById(lastMatch.Champion);
+
+            Participant participant = GetParticipantStatsForMatch(lastMatch, champion);
+
+            string result = participant.Stats.Winner ? "win" : "loss";
+            return
+                $"Last match stats: Result: {result} KDA: {participant.Kda}, Kills: {participant.Stats.Kills}, Deaths: {participant.Stats.Deaths}, Assists: {participant.Stats.Assists}";
+        }
+
+        private Participant GetParticipantStatsForMatch(Match match, Champion champion)
+        {
+            string url = $"{_euwBaseUrl}/v2.2/match/{match.MatchId}?{_apiKey}";
+            string result = GetJsonResponseFromUrl(url);
+
+            var jObject = JObject.Parse(result);
+            List<JToken> matchesJToken = jObject["participants"].Children().ToList();
+
+            var participants = new List<Participant>();
+            foreach (JToken matchToken in matchesJToken)
+            {
+                Participant participant = JsonConvert.DeserializeObject<Participant>(matchToken.ToString());
+                participants.Add(participant);
+            }
+
+            return participants.FirstOrDefault(x => x.ChampionId == champion.Id);
         }
 
         private List<Match> GetLastMatchesForSummonerId(int summonerId, int numberOfMatches = 1)

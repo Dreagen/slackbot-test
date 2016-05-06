@@ -15,11 +15,13 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Configuration;
 using Noobot.Core.Configuration;
 using Noobot.Core.DependencyResolution;
 using Noobot.Core.Logging;
 using Noobot.Examples.Web.Configuration;
 using Noobot.Examples.Web.Logging;
+using Noobot.Examples.Web.RiotApi;
 using StructureMap;
 
 namespace Noobot.Examples.Web.DependencyResolution {

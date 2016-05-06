@@ -243,8 +243,11 @@
     <Compile Include="Middleware\NickMiddleware.cs" />
     <Compile Include="NoobotHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RiotApi\IRiotService.cs" />
     <Compile Include="RiotApi\Models\Champion.cs" />
     <Compile Include="RiotApi\Models\Match.cs" />
+    <Compile Include="RiotApi\Models\Participant.cs" />
+    <Compile Include="RiotApi\Models\Stats.cs" />
     <Compile Include="RiotApi\RiotService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
