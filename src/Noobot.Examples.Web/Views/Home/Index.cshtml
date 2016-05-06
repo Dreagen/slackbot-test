@@ -1,0 +1,12 @@
+﻿@model string[]
+
+@{
+    ViewBag.Title = "Noobot Log";
+}
+<br/>
+<ul>
+    @foreach (string line in Model.Reverse())
+    {
+        <li>@line</li>
+    }
+</ul>
