@@ -3,6 +3,9 @@
 
 # Config
 
+#Logging
+log.txt
+
 # User-specific files
 *.suo
 *.user

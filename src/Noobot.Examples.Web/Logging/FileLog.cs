@@ -1,29 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace Noobot.Examples.Web.Logging
 {
-    public class MemoryLog : IMemoryLog
+    public class FileLog : IMemoryLog
     {
         private readonly List<string> _log;
         private readonly object _lock;
 
-        public MemoryLog()
+        public FileLog()
         {
             _log = new List<string>();
             _lock = new object();
+
+            File.Create("./log.txt");
         }
 
         public void Log(string data)
         {
             lock (_lock)
             {
-                Console.WriteLine(data);
-                Debug.WriteLine(data);
                 _log.Add(data);
             }
+
+            StreamWriter writer = new StreamWriter("./log.txt");
+
+            writer.WriteLine(data);
+            writer.Close();
         }
 
         public string[] FullLog()
