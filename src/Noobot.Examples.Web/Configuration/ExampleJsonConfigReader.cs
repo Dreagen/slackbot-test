@@ -2,6 +2,7 @@
 using System.IO;
 using Newtonsoft.Json.Linq;
 using Noobot.Core.Configuration;
+using Noobot.Examples.Web.Encryption;
 
 namespace Noobot.Examples.Web.Configuration
 {
@@ -12,7 +13,8 @@ namespace Noobot.Examples.Web.Configuration
     {
         public string SlackApiKey()
         {
-            return GetConfigEntry<string>("slack:apiToken");
+            string apiToken = GetConfigEntry<string>("slack:apiToken");
+            return EncryptionHelper.Decrypt(apiToken);
         }
 
         public bool HelpEnabled()

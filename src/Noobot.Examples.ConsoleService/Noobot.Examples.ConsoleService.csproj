@@ -97,6 +97,7 @@
   <ItemGroup>
     <Compile Include="Configuration\ExampleJsonConfigReader.cs" />
     <Compile Include="Configuration\ExampleConfiguration.cs" />
+    <Compile Include="Encryption\EncryptionHelper.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />
     <Compile Include="Logging\TextWriterDistributor.cs" />
