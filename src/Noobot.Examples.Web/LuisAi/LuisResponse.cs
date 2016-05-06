@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Noobot.Examples.ConsoleService.LuisAi
+namespace Noobot.Examples.Web.LuisAi
 {
     public class LuisResponse
     {

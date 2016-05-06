@@ -3,16 +3,16 @@ using Noobot.Core.MessagingPipeline.Middleware;
 using Noobot.Core.MessagingPipeline.Request;
 using Noobot.Core.MessagingPipeline.Response;
 using Noobot.Core.Plugins.StandardPlugins;
-using Noobot.Examples.ConsoleService.LuisAi;
-using Noobot.Examples.ConsoleService.RiotApi;
+using Noobot.Examples.Web.LuisAi;
+using Noobot.Examples.Web.RiotApi;
 
-namespace Noobot.Toolbox.Pipeline.Middleware
+namespace Noobot.Examples.Web.Middleware
 {
     public class NickMiddleware : MiddlewareBase
     {
         private readonly StatsPlugin _statsPlugin;
-        private LuisAiService _luisAiService;
-        private RiotService _riotService;
+        private readonly LuisAiService _luisAiService;
+        private readonly RiotService _riotService;
 
         public NickMiddleware(IMiddleware next, StatsPlugin statsPlugin) : base(next)
         {
@@ -25,13 +25,13 @@ namespace Noobot.Toolbox.Pipeline.Middleware
                 {
                     ValidHandles = new [] { "" },
                     Description = "Books holiday",
-                    EvaluatorFunc = HolidayHandler,
+                    EvaluatorFunc = RiotApiHandler,
                     MessageShouldTargetBot = true
                 }
             };
         }
 
-        private IEnumerable<ResponseMessage> HolidayHandler(IncomingMessage message, string matchedHandle)
+        private IEnumerable<ResponseMessage> RiotApiHandler(IncomingMessage message, string matchedHandle)
         {
             yield return message.IndicateTypingOnChannel();
 

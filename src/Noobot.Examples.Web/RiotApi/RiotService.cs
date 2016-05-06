@@ -1,8 +1,7 @@
-﻿
-using System.IO;
+﻿using System.IO;
 using System.Net;
 
-namespace Noobot.Examples.ConsoleService.RiotApi
+namespace Noobot.Examples.Web.RiotApi
 {
     public class RiotService
     {

@@ -1,7 +1,6 @@
-﻿
-using Noobot.Examples.ConsoleService.Extensions;
+﻿using Noobot.Examples.ConsoleService.Extensions;
 
-namespace Noobot.Examples.ConsoleService.LuisAi
+namespace Noobot.Examples.Web.LuisAi
 {
     public class LuisIntent
     {

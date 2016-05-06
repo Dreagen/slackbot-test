@@ -1,9 +1,8 @@
 ﻿using System.IO;
 using System.Net;
 using Newtonsoft.Json;
-using Noobot.Examples.ConsoleService.Extensions;
 
-namespace Noobot.Examples.ConsoleService.LuisAi
+namespace Noobot.Examples.Web.LuisAi
 {
     class LuisAiService
     {

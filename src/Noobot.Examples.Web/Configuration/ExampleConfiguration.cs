@@ -1,4 +1,5 @@
 ﻿using Noobot.Core.Configuration;
+using Noobot.Examples.Web.Middleware;
 using Noobot.Toolbox.Pipeline.Middleware;
 
 namespace Noobot.Examples.Web.Configuration
