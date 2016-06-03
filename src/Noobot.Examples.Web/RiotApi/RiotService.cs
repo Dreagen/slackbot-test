@@ -14,6 +14,7 @@ namespace Noobot.Examples.Web.RiotApi
         private readonly string _globalBaseUrl = "https://global.api.pvp.net/api/lol/static-data/euw/v1.2";
         private readonly string _apiKey;
         private readonly int _dreagenId = 28147640;
+        public const string _riotError = "Having trouble contacting riot... try again in a few mins";
 
         public RiotService(string apiKey)
         {
@@ -21,49 +22,70 @@ namespace Noobot.Examples.Web.RiotApi
         }
         public string GetLastPlayedChampion(string summoner = "Dreagen")
         {
-            List<Match> lastMatchesForSummonerId = GetLastMatchesForSummonerId(_dreagenId, 1);
-            if (!lastMatchesForSummonerId.Any())
+            try
             {
-                return null;
+                List<Match> lastMatchesForSummonerId = GetLastMatchesForSummonerId(_dreagenId, 1);
+                if (!lastMatchesForSummonerId.Any())
+                {
+                    return null;
+                }
+
+                Champion champion = GetChampionById(lastMatchesForSummonerId.First().Champion);
+
+                return $"{champion.Name}, {champion.Title}";
             }
-
-            Champion champion =  GetChampionById(lastMatchesForSummonerId.First().Champion);
-
-            return $"{champion.Name}, {champion.Title}";
+            catch (WebException)
+            {
+                return _riotError;
+            }
         }
 
         public string GetResultOfLastGame(string summoner = "Dreagen")
         {
-            List<Match> lastMatchesForSummonerId = GetLastMatchesForSummonerId(_dreagenId, 1);
-            if (!lastMatchesForSummonerId.Any())
+            try
             {
-                return null;
+                List<Match> lastMatchesForSummonerId = GetLastMatchesForSummonerId(_dreagenId, 1);
+                if (!lastMatchesForSummonerId.Any())
+                {
+                    return null;
+                }
+
+                Match lastMatch = lastMatchesForSummonerId.First();
+                Champion champion = GetChampionById(lastMatch.Champion);
+
+                Participant participant = GetParticipantStatsForMatch(lastMatch, champion);
+
+                return participant.Stats.Winner ? "win" : "loss";
             }
-
-            Match lastMatch = lastMatchesForSummonerId.First();
-            Champion champion = GetChampionById(lastMatch.Champion);
-
-            Participant participant = GetParticipantStatsForMatch(lastMatch, champion);
-
-            return participant.Stats.Winner ? "win" : "loss";
+            catch (WebException)
+            {
+                return _riotError;
+            }
         }
 
         public string GetStatsOfLastGame(string summoner = "Dreagen")
         {
-            List<Match> lastMatchesForSummonerId = GetLastMatchesForSummonerId(_dreagenId, 1);
-            if (!lastMatchesForSummonerId.Any())
+            try
             {
-                return null;
+                List<Match> lastMatchesForSummonerId = GetLastMatchesForSummonerId(_dreagenId, 1);
+                if (!lastMatchesForSummonerId.Any())
+                {
+                    return null;
+                }
+
+                Match lastMatch = lastMatchesForSummonerId.First();
+                Champion champion = GetChampionById(lastMatch.Champion);
+
+                Participant participant = GetParticipantStatsForMatch(lastMatch, champion);
+
+                string result = participant.Stats.Winner ? "win" : "loss";
+                return
+                    $"Last match stats: Result: {result} KDA: {participant.Kda}, Kills: {participant.Stats.Kills}, Deaths: {participant.Stats.Deaths}, Assists: {participant.Stats.Assists}";
             }
-
-            Match lastMatch = lastMatchesForSummonerId.First();
-            Champion champion = GetChampionById(lastMatch.Champion);
-
-            Participant participant = GetParticipantStatsForMatch(lastMatch, champion);
-
-            string result = participant.Stats.Winner ? "win" : "loss";
-            return
-                $"Last match stats: Result: {result} KDA: {participant.Kda}, Kills: {participant.Stats.Kills}, Deaths: {participant.Stats.Deaths}, Assists: {participant.Stats.Assists}";
+            catch (WebException)
+            {
+                return _riotError;
+            }
         }
 
         private Participant GetParticipantStatsForMatch(Match match, Champion champion)
